@@ -13,4 +13,4 @@ Offline validation:
 - Ruff: all checks passed.
 - Calibration report generated successfully.
 
-The live end-to-end run and routing_decisions.json generation remain unverified because API authentication was unavailable.
+The live end-to-end run remains unverified because API authentication was unavailable. routing_decisions.json was subsequently generated separately using the project's routing function with test fixtures; it is not live pipeline output.

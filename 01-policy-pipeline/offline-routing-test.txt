@@ -18,3 +18,12 @@ tests/test_us04_routing.py::test_ac_04_04_calibration_report_handles_empty_input
 tests/test_us04_routing.py::test_ac_04_05_routing_decisions_written_to_json_file PASSED [100%]
 
 ============================== 9 passed in 0.03s ===============================
+
+
+===== OFFLINE ROUTING ARTIFACT GENERATED =====
+Output: 01-policy-pipeline/routing_decisions.json
+Method: Project write_routing_decisions() using the project's test helpers.
+Records: POL-A -> auto_approve; POL-B -> human_review.
+POL-B has premium_amount confidence 0.5, below the 0.90 threshold.
+This artifact demonstrates deterministic routing and JSON serialization only.
+It does not represent a live extraction or a successful live pipeline run.
