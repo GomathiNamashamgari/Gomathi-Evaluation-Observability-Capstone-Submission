@@ -23,8 +23,8 @@
 | Evidence | Value |
 |---|---|
 | Passing test count | 45 passed, 3 skipped (`01-policy-pipeline/tests.txt`) |
-| Routing output file | `01-policy-pipeline/routing_decisions.json` was not generated because live pipeline execution failed due to missing Anthropic authentication. |
-| auto_approve / human_review / spot_check counts | Not available: no generated routing output to count. |
+| Routing output file | `01-policy-pipeline/routing_decisions.json` contains two offline test-fixture decisions generated using the project's routing function. It is not live pipeline output; the live run failed because Anthropic authentication was unavailable. |
+| auto_approve / human_review / spot_check counts | Offline fixture only: 1 `auto_approve`, 1 `human_review`, 0 `spot_check`. These counts describe the two test fixtures, not live pipeline results. |
 
 **1a. Retry boundary.** From your perturbation run (a required field removed), paste the escalation record. How many API calls did the system make, and why is retrying a futile case worse than escalating it?
 
@@ -32,7 +32,7 @@
 
 **1b. Reading the router.** Pick one `human_review` record from your routing output. Which of the three signals (confidence, reviewer, integration) sent it to a human? If you had trusted the model's confidence alone, what would have happened?
 
-> A specific `human_review` record cannot be quoted because the live run failed and `routing_decisions.json` was not generated. The tests in `tests.txt` verify that low confidence, integration failure, and reviewer disagreement can each route a record to human review. They also verify that high confidence combined with reviewer disagreement still routes to human review. If confidence alone were trusted in that last case, a record could be auto-approved despite an independent reviewer disagreeing. The actual signal for a particular run cannot be determined without its routing record.
+> In the offline fixture `POL-B` in `01-policy-pipeline/routing_decisions.json`, `premium_amount` confidence is 0.5, below the 0.90 threshold. The record is routed to `human_review`, and `fields_below_threshold` identifies `premium_amount`. The fixture has no reviewer disagreements or integration failures, so low confidence is the recorded routing signal. This is a test-fixture example, not a live pipeline result.
 
 **1c. Where the aggregate lies.** Run the calibration snippet. Quote the one cell whose accuracy lags its confidence, plus the overall figure. What does slicing by `policy_type × field` catch that a single number hides?
 
@@ -67,7 +67,7 @@
 | Evidence | Value |
 |---|---|
 | Passing test count | 34 passed (`03-supply-chain/tests.txt`) |
-| Briefing file | The generated briefing is captured in `03-supply-chain/investigation-run.txt`; a separate `briefing.*` file was not present in the evidence listing. |
+| Briefing file | `03-supply-chain/briefing.md` contains the normal offline briefing; `03-supply-chain/investigation-run.txt` contains the captured investigation run, and `03-supply-chain/timeout-run.txt` records the simulated-timeout run. |
 | Section the conflict landed in | `Contested`, for `on_time_delivery_rate`. |
 
 **3a. Annotate, don't arbitrate.** Quote one conflicting-metric pair from your briefing — both values, sources, dates. Give one way a reader is better served by the preserved conflict than by a single reconciled number.
@@ -102,6 +102,6 @@
 
 ## Evidence limitations
 
-- System 1's live pipeline and `routing_decisions.json` could not be generated because Anthropic authentication was unavailable.
+- System 1's live pipeline run and live routing output could not be generated because Anthropic authentication was unavailable. The saved `routing_decisions.json` is an offline test-fixture artifact, as documented in `01-policy-pipeline/offline-routing-test.txt`.
 - The System 2 corrected fixture could not be fully replayed because no cached response existed for the changed input. The corrected and original totals were compared using the project's actual offline validator.
 - System 3's normal and simulated-timeout offline runs completed and were captured in their respective text artifacts.
