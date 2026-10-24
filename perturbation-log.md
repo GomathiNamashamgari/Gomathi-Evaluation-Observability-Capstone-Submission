@@ -9,10 +9,10 @@ own experiment earns more credit).
 ### System 1 — validated, routed pipeline
 
 - **Change I made (file + what I changed):** Copied `data/policies/POL-2025-001.txt` to `perturbations/POL-2025-001-missing-endorsements.txt` and removed the `ENDORSEMENTS` section from the copy. The original policy was left unchanged.
-- **Command I ran:** Attempted `.venv/bin/policy-extractor extract perturbations/POL-2025-001-missing-endorsements.txt --policy-id POL-2025-001`; the live run failed before extraction because no API authentication was configured. Then ran `.venv/bin/pytest tests/test_us01_retry.py::test_ac_01_04_missing_source_halts_immediately -v`.
-- **What I predicted:** When extraction returns `endorsements=None`, validation will classify it as `missing_source` with pattern `endorsements_absent` and escalate immediately rather than retrying.
-- **What actually happened:** The live CLI attempt stopped with an authentication error, so it did not verify extraction of the modified document. The targeted recorded-client test passed: `test_ac_01_04_missing_source_halts_immediately PASSED` (`1 passed`). That test asserts escalation for the missing endorsements field after one recorded-client call.
-- **How this differs from the unperturbed run:** The modified input omits the endorsements section, while the original retains it. The controlled test verifies the pipeline's missing-source escalation behavior, but it is not a live extraction of the modified file. Output is saved in `01-policy-pipeline/perturbation-run.txt`.
+- **Command I ran:** `PYTHONPATH="$PWD/tests:$PWD" .venv/bin/python perturbations/run_recorded_perturbation.py`
+- **What I predicted:** The original policy would produce a valid `PolicyExtraction`. With the endorsements section removed, a recorded response containing `endorsements=None` would trigger `RetryFutileEscalation` with `category='missing_source'` and `detected_pattern='endorsements_absent'`, without retrying.
+- **What actually happened:** The script read both policy files and confirmed that the original contains `ENDORSEMENTS` and the modified copy does not. The original produced `PolicyExtraction(policy_id='POL-2025-001', ...)` with one recorded client call. The perturbed input produced `RetryFutileEscalation(policy_id='POL-2025-001', field='endorsements', category='missing_source', detected_pattern='endorsements_absent', ...)` with one recorded client call, even though `max_retries=3` was configured. Both checks passed.
+- **How this differs from the unperturbed run:** The original policy retains its endorsements section and the recorded response yields a successful extraction. The modified policy lacks that section, and the controlled response returns null for endorsements, causing immediate escalation. These are deterministic recorded-response experiments, not live API extractions. Full output is saved in `01-policy-pipeline/perturbation-run.txt`.
 
 ---
 

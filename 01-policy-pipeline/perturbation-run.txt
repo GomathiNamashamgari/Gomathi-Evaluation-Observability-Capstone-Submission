@@ -1,12 +1,16 @@
-============================= test session starts ==============================
-platform linux -- Python 3.13.0, pytest-9.1.1, pluggy-1.7.0 -- /workspace/Build a Validated, Routed Insurance Policy Extraction Pipeline/01-retry-with-error-feedback/solution/.venv/bin/python3.13
-cachedir: .pytest_cache
-rootdir: /workspace/Build a Validated, Routed Insurance Policy Extraction Pipeline/01-retry-with-error-feedback/solution
-configfile: pyproject.toml
-plugins: asyncio-1.4.0, anyio-4.15.1
-asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collecting ... collected 1 item
+EXPERIMENT: Original versus missing-endorsements policy
+Original contains ENDORSEMENTS: True
+Modified contains ENDORSEMENTS: False
+Configured max retries: 3
 
-tests/test_us01_retry.py::test_ac_01_04_missing_source_halts_immediately PASSED [100%]
+ORIGINAL POLICY RESULT
+Result: PolicyExtraction(policy_id='POL-2025-001', policy_type='auto', premium_amount=1847.62, deductible=500.0, coverage_limit=300000.0, endorsements=[Endorsement(name='Roadside Assistance', limit=None)], exclusions=['Racing'], premium_components=None, confidence={'policy_type': 0.99, 'premium_amount': 0.97, 'deductible': 0.95, 'coverage_limit': 0.95, 'endorsements': 0.92, 'exclusions': 0.94}, retry_count=0, final_attempt_index=0, validation_history=[])
+Recorded client calls: 1
+CHECK: PASS — original policy extraction succeeded.
 
-============================== 1 passed in 0.03s ===============================
+PERTURBED POLICY RESULT
+Result: RetryFutileEscalation(policy_id='POL-2025-001', field='endorsements', category='missing_source', detected_pattern='endorsements_absent', reason="Field 'endorsements' returned null — the source document does not contain this information. Retry is futile; escalate to human review.")
+Recorded client calls: 1
+CHECK: PASS — escalated after one recorded call; no retry was made.
+
+LIMITATION: Deterministic recorded responses; not a live API extraction.
