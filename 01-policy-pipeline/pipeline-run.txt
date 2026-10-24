@@ -1,0 +1,16 @@
+System 1: Insurance Policy Extraction Pipeline
+
+Live pipeline command attempted:
+policy-extractor pipeline data/policies/ --routing-out routing_decisions.json --seed 42
+
+Result: Unable to complete because Anthropic authentication is not configured.
+Error: Could not resolve authentication method.
+
+Offline validation:
+- Full test suite: 45 passed, 3 skipped.
+- Routing tests: 9 passed.
+- Mypy: no issues found in 11 source files.
+- Ruff: all checks passed.
+- Calibration report generated successfully.
+
+The live end-to-end run and routing_decisions.json generation remain unverified because API authentication was unavailable.

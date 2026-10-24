@@ -1,0 +1,12 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.0, pytest-9.1.1, pluggy-1.7.0 -- /workspace/Build a Validated, Routed Insurance Policy Extraction Pipeline/01-retry-with-error-feedback/solution/.venv/bin/python3.13
+cachedir: .pytest_cache
+rootdir: /workspace/Build a Validated, Routed Insurance Policy Extraction Pipeline/01-retry-with-error-feedback/solution
+configfile: pyproject.toml
+plugins: asyncio-1.4.0, anyio-4.15.1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/test_us01_retry.py::test_ac_01_04_missing_source_halts_immediately PASSED [100%]
+
+============================== 1 passed in 0.03s ===============================
